@@ -1,0 +1,6 @@
+apiVersion: math.com/v1alpha1
+kind: Calculator
+metadata:
+  name: calculator-sample
+spec:
+  # TODO(user): Add fields here
