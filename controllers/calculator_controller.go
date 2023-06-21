@@ -49,7 +49,22 @@ type CalculatorReconciler struct {
 func (r *CalculatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	// Retrieve the latest version of the resource from ze cluster
+	calculator := mathcomv1alpha1.Calculator{}
+	err := r.Client.Get(ctx, req.NamespacedName, &calculator)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
+	// Sum up the numbers from spec
+	sum := calculator.Spec.NumberOne + calculator.Spec.NumberTwo
+
+	// Store in status
+	calculator.Status.Sum = sum
+	err = r.Client.Status().Update(ctx, &calculator)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
 
 	return ctrl.Result{}, nil
 }
